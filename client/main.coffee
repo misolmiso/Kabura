@@ -12,17 +12,27 @@ setTimer = (eventTarget, waitTime, onTimeEvent, waitTimeEvent = ->) ->
             
     eventTarget.on 'enterframe', event
 
-
 require ["lib/enchant"], =>
     enchant('')
 
     game = new Core(window.innerWidth, window.innerHeight)
 
     game.fps = 30
+
+    class Piece extends Sprite
+        @imageUri = "client/material/piece.png"
+        @colorToIndex = {
+            red: 0, blue: 1, green: 2, yellow: 3, purple: 4
+            }
+        
+        constructor: (color) -> 
+            super(128, 128)
+            @image = game.assets[Piece.imageUri]
+            @frame = Piece.colorToIndex[color]
+    game.preload(Piece.imageUri)
     
     game.onload = =>
-        red = new Sprite(120, 120)
-        red.backgroundColor = 'red'
+        red = new Piece('red')
         game.rootScene.addChild(red)
                         
         org_x = null
