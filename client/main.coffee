@@ -1,5 +1,18 @@
 'use strict'
 
+setTimer = (eventTarget, waitTime, onTimeEvent, waitTimeEvent = ->) ->
+    targetTime = waitTime + Date.now()
+    event = =>
+        now = Date.now()
+        if now > targetTime
+            eventTarget.removeEventListener 'enterframe', event
+            onTimeEvent(now)
+        else
+            waitTimeEvent(now)
+            
+    eventTarget.on 'enterframe', event
+
+
 require ["lib/enchant"], =>
     enchant('')
 
