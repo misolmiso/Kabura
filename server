@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from tornado import (ioloop, web)
+from os import path
+
+root_path = path.dirname(__file__)
+
+class MainHandler(web.RequestHandler):
+    def get(self):
+        self.render("client/index.html")
+    
+handlers = [
+    (r"/client/(.*)", web.StaticFileHandler, {"path": path.join(root_path, "client")}),
+    (r"/", MainHandler)
+    ]
+
+settings = dict(
+    autoload = True,
+    debug = True
+    )
+
+app = web.Application(handlers, **settings)
+
+if __name__ == "__main__":
+    app.listen(8000)
+    ioloop.IOLoop.instance().start()
