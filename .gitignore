@@ -5,3 +5,6 @@ __pycache__/
 
 # CoffeeScript
 client/*.js
+
+# bower
+client/bower_components/
