@@ -1,17 +1,37 @@
 module.exports = (grunt) ->
     grunt.loadNpmTasks 'grunt-contrib'
+    grunt.loadNpmTasks 'grunt-contrib-requirejs'
 
     grunt.initConfig
+        requirejs:
+            nooptimize:
+                options:
+                    mainConfigFile: "r-config",
+                    optimize: "none",
+                    name: "main-unoptimized",
+                    out: "main.js"
+                
+            optimize:
+                options:
+                    mainConfigFile: "r-config",
+                    name: "main-unoptimized",
+                    out: "main.js"
+    
         watch:
-            coffee:
+            debug:
                 files: "coffee/*.coffee",
-                tasks: ["coffee"]
+                tasks: ["debug"]
 
         coffee:
             compile:
-                files:
-                    'main.js': [
-                        "coffee/*.coffee"
-                    ]
+                files: "main-unoptimized.js": "coffee/*.coffee"
 
-    grunt.registerTask "default", ["coffee"]
+    grunt.registerTask "debug", [
+        "coffee:compile"
+        "requirejs:nooptimize"
+        ]
+        
+    grunt.registerTask "default", [
+        "coffee:compile"
+        "requirejs:optimize"
+        ]

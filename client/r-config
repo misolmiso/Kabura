@@ -1,0 +1,9 @@
+requirejs.config({
+    paths: {
+        'underscore': './lib/underscore',
+        'enchant': './lib/enchant'
+    },
+    shim: {
+        'underscore': {exports: '_'}
+    }
+})

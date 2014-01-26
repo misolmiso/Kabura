@@ -12,11 +12,7 @@ setTimer = (eventTarget, waitTime, onTimeEvent, waitTimeEvent = ->) ->
             
     eventTarget.on 'enterframe', event
 
-requirejs.config shim: {
-    'lib/underscore': {exports: '_'}
-    }
-
-require ["lib/enchant", "lib/underscore"], (e, _) =>
+require ["enchant", "underscore"], (e, _) =>
     enchant('')
 
     game = new Core(window.innerWidth, window.innerHeight)
