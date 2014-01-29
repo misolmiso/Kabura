@@ -40,8 +40,12 @@ module.exports = (grunt) ->
     "coffee:compile"
     "requirejs:nooptimize"
     ]
-    
+
   grunt.registerTask "default", [
+    "debug"
+    ]
+    
+  grunt.registerTask "release", [
     "coffeelint"
     "coffee:compile"
     "requirejs:optimize"
