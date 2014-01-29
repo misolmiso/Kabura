@@ -81,6 +81,8 @@ require ["enchant", "underscore"], (e, _) =>
 
       for r, cs of _.groupBy(pieces, (p) -> p.col)
         {true:dels, false:lefs} = _.groupBy(cs, (p) -> p.del)
+        dels = dels ? []
+        lefs = lefs ? []
 
         for p, i in _.sortBy(lefs, (p) -> -p.row)
           p.row = (4 - i)
