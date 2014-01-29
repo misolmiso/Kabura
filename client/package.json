@@ -35,7 +35,10 @@
     "grunt-contrib-less": "~0.7.0",
     "grunt-contrib-yuidoc": "~0.5.0",
     "grunt-contrib": "~0.8.0",
-    "grunt-coffeelint": "0.0.8"
+    "grunt-coffeelint": "0.0.8",
+    "chai": "~1.8.1",
+    "grunt-simple-mocha": "~0.4.0",
+    "grunt-mocha": "~0.4.10"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

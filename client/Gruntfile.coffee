@@ -2,6 +2,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-coffeelint'
+  grunt.loadNpmTasks 'grunt-simple-mocha'
 
   grunt.initConfig
     coffeelint:
@@ -11,6 +12,12 @@ module.exports = (grunt) ->
             "Gruntfile.coffee"
             "coffee/*.coffee"
             ]
+
+    simplemocha:
+      all:
+        src: ["test/*.coffee"]
+      options:
+        ui: 'tdd'
 
     requirejs:
       nooptimize:
@@ -37,6 +44,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask "debug", [
     "coffeelint"
+    "simplemocha"
     "coffee:compile"
     "requirejs:nooptimize"
     ]
@@ -47,6 +55,7 @@ module.exports = (grunt) ->
     
   grunt.registerTask "release", [
     "coffeelint"
+    "simplemocha"
     "coffee:compile"
     "requirejs:optimize"
     ]
