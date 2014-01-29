@@ -1,8 +1,17 @@
 module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
+  grunt.loadNpmTasks 'grunt-coffeelint'
 
   grunt.initConfig
+    coffeelint:
+      app:
+        files:
+          src: [
+            "Gruntfile.coffee"
+            "coffee/*.coffee"
+            ]
+
     requirejs:
       nooptimize:
         options:
@@ -27,11 +36,13 @@ module.exports = (grunt) ->
         files: "main-unoptimized.js": "coffee/*.coffee"
 
   grunt.registerTask "debug", [
+    "coffeelint"
     "coffee:compile"
     "requirejs:nooptimize"
     ]
     
   grunt.registerTask "default", [
+    "coffeelint"
     "coffee:compile"
     "requirejs:optimize"
     ]

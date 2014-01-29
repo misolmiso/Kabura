@@ -2,7 +2,7 @@
 
 setTimer = (eventTarget, waitTime, onTimeEvent, waitTimeEvent = ->) ->
   targetTime = waitTime + Date.now()
-  event = =>
+  event = ->
     now = Date.now()
     if now > targetTime
       eventTarget.removeEventListener 'enterframe', event
@@ -24,7 +24,7 @@ require ["enchant", "underscore"], (e, _) =>
     @color = ['red', 'blue', 'green', 'yellow', 'purple']
     @colorToIndex = _.object(@color, _.range(@color.length))
     
-    constructor: (color) -> 
+    constructor: (color) ->
       super(128, 128)
       @color = color
       @image = game.assets[Piece.imageUri]
@@ -38,7 +38,7 @@ require ["enchant", "underscore"], (e, _) =>
 
   touch = null
 
-  game.onload = =>
+  game.onload = ->
     label = new Label('')
     game.rootScene.addChild(label)
     
@@ -48,7 +48,8 @@ require ["enchant", "underscore"], (e, _) =>
     , (left) ->
       label.text = left
     
-    pieces = _.flatten((_.keys(Piece.colorToIndex).map((k) -> new Piece(k)) for c in [0...6]))
+    pieces = _.flatten((_.keys(Piece.colorToIndex)
+    .map((k) -> new Piece(k)) for c in [0...6]))
 
     delete_pieces = (pieces) ->
       for p in pieces
@@ -94,7 +95,7 @@ require ["enchant", "underscore"], (e, _) =>
         p.tl.exec(-> @moving = on)
         p.tl.moveTo(p.col * 128, p.row * 128, 10).exec(-> @moving = off)
 
-      if pieces.filter((p) => p.del).length != 0
+      if pieces.filter((p) -> p.del).length != 0
         game.rootScene.tl.delay(10).exec ->
           delete_pieces(pieces)
 
