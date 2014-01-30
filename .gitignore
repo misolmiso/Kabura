@@ -10,6 +10,7 @@ server/lib/
 
 # CoffeeScript
 client/*.js
+client/coffee/*.js
 
 # npm
 client/node_modules/

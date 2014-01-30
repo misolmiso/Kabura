@@ -2,6 +2,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-coffeelint'
+  grunt.loadNpmTasks 'grunt-simple-mocha'
 
   grunt.initConfig
     coffeelint:
@@ -12,18 +13,25 @@ module.exports = (grunt) ->
             "coffee/*.coffee"
             ]
 
+    simplemocha:
+      all:
+        src: ["test/*.coffee"]
+      options:
+        reporter: 'nyan'
+        ui: 'tdd'
+
     requirejs:
       nooptimize:
         options:
           mainConfigFile: "r-config",
           optimize: "none",
-          name: "main-unoptimized",
+          name: "coffee/game",
           out: "main.js"
         
       optimize:
         options:
           mainConfigFile: "r-config",
-          name: "main-unoptimized",
+          name: "coffee/game",
           out: "main.js"
   
     watch:
@@ -32,12 +40,17 @@ module.exports = (grunt) ->
         tasks: ["debug"]
 
     coffee:
-      compile:
-        files: "main-unoptimized.js": "coffee/*.coffee"
+      glob_to_multiple:
+        expand: true
+        flatten: true
+        src: ['coffee/*.coffee']
+        dest: 'coffee/'
+        ext: '.js'
 
   grunt.registerTask "debug", [
     "coffeelint"
-    "coffee:compile"
+    "coffee"
+    "simplemocha"
     "requirejs:nooptimize"
     ]
 
@@ -47,6 +60,7 @@ module.exports = (grunt) ->
     
   grunt.registerTask "release", [
     "coffeelint"
-    "coffee:compile"
+    "coffee"
+    "simplemocha"
     "requirejs:optimize"
     ]
