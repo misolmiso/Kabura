@@ -19,3 +19,5 @@ $ virtualenv -p python3 .
 $ source ./bin/activate  
 $ pip install -r packages.txt  
 $ ./server  
+localhost:8000にブラウザで接続  
+(ポート番号の変更はKabura/server/server内を書き換える)  
