@@ -4,11 +4,10 @@ WebSocketとPythonとCoffeeScriptで、
 スマートフォンで遊べるゲームを作ろうとするもの
 
 ##Requires
--Python >= 3.2
--virtualenv
-
--npm
--grunt-cli
+*Python >= 3.2
+*virtualenv
+*npm
+*grunt-cli
 
 ##Build and Run
 $ cd /path/to/Kabura  
