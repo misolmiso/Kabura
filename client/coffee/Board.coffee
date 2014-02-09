@@ -1,13 +1,12 @@
 'use strict'
 
-define ['./Piece.js'], (Piece) ->
+define [], () ->
   class Board
     @height = 5
     @width = 6
 
-    constructor: ->
-      @array = [0...6].map (h) ->
-        [0...5].map (p) -> new Piece()
+    constructor: (array) ->
+      @array = array
 
   return Board
 

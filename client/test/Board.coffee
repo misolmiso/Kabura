@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 requirejs = require('requirejs')
 assert = require('chai').assert
@@ -12,6 +12,18 @@ requirejs ['./coffee/Board.js', './coffee/Piece.js']
   Piece = Piece_
 
 suite 'Board', ->
+  board_array = null
+
+  setup ->
+    P = Piece
+    @board_array = [
+      [P.R, P.R, P.R, P.Y, P.Y, P.Y]
+      [P.R, P.R, P.R, P.Y, P.Y, P.Y]
+      [P.R, P.R, P.R, P.Y, P.Y, P.Y]
+      [P.R, P.R, P.R, P.Y, P.Y, P.Y]
+      [P.R, P.R, P.R, P.Y, P.Y, P.Y]
+    ]
+  
   test '.width', ->
     assert.equal Board.width, 6
   
@@ -19,15 +31,16 @@ suite 'Board', ->
     assert.equal Board.height, 5
   
   test '#array', ->
-    board = new Board()
-    w = board.array
+    b = new Board(@board_array)
+    h = b.array
     
-    assert.instanceOf w, Array
-    assert.lengthOf w, Board.width
+    assert.instanceOf h, Array
+    assert.lengthOf h, Board.height
   
-    w.forEach (h) ->
-        assert.instanceOf h, Array
-        assert.lengthOf h, Board.height
-  
-        h.forEach (p) ->
-            assert.instanceOf p, Piece
+    h.forEach (w) ->
+      assert.instanceOf w, Array
+      assert.lengthOf w, Board.width
+
+      w.forEach (p) ->
+        assert.instanceOf p, Piece
+
