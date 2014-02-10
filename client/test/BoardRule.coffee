@@ -27,10 +27,16 @@ suite 'BoardRule', ->
     ]
 
   test 'findLinedUpPieces', ->
-    r = BoardRule.findLinedUpPieces(@board)
+    lines = BoardRule.findLinedUpPieces(@board)
 
-    console.log(r)
-    console.log({length:4, color:Piece.B.color, col:0, row:1, isHorizontal:false})
-    
-    assert.lengthOf r, 4
+    assert.lengthOf lines, 4
 
+    for line in lines
+      assert.operator line.length, '>=', 3
+
+      if line.isHorizontal
+        for col in [(line.col)...(line.col + line.length)]
+          assert.equal @board.get(line.row, col).color, line.color
+      else
+        for row in [(line.row)...(line.row + line.length)]
+          assert.equal @board.get(row, line.col).color, line.color

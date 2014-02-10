@@ -4,6 +4,9 @@
   
 define ["underscore"], (_) ->
   class BoardRule
+    class @LinedUp
+      constructor: (@length, @color, @col, @row, @isHorizontal) ->
+
     @findLinedUpPieces = (board) ->
       group = (line) ->
         ret = [{index:0, length:1, color:line[0].color}]
@@ -16,22 +19,18 @@ define ["underscore"], (_) ->
      
       array = board.array
       ret = []
+
+      LinedUp = BoardRule.LinedUp
      
       ret = ret.concat _.flatten(array.map((row, row_index) ->
         return group(row).map((g) ->
-          return {
-            length:g.length, color:g.color,
-            col:g.index, row:row_index, isHorizontal:true
-            }
+          new LinedUp(g.length, g.color, g.index, row_index, true)
         ).filter((g) -> g.length >= 3)
       ))
 
       ret = ret.concat _.flatten(_.zip.apply(_, array).map((col, col_index) ->
         return group(col).map((g) ->
-          return {
-            length:g.length, color:g.color,
-            col:col_index, row:g.index, isHorizontal:false
-            }
+          new LinedUp(g.length, g.color, col_index, g.index, false)
         ).filter((g) -> g.length >= 3)
       ))
 

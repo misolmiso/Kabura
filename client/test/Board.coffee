@@ -17,11 +17,11 @@ suite 'Board', ->
   setup ->
     P = Piece
     @board_array = [
+      [P.R, P.R, P.R, P.Y, P.Y, P.P]
       [P.R, P.R, P.R, P.Y, P.Y, P.Y]
       [P.R, P.R, P.R, P.Y, P.Y, P.Y]
       [P.R, P.R, P.R, P.Y, P.Y, P.Y]
-      [P.R, P.R, P.R, P.Y, P.Y, P.Y]
-      [P.R, P.R, P.R, P.Y, P.Y, P.Y]
+      [P.B, P.R, P.R, P.Y, P.Y, P.G]
     ]
   
   test '.width', ->
@@ -29,6 +29,13 @@ suite 'Board', ->
   
   test '.height', ->
     assert.equal Board.height, 5
+
+  test '#get', ->
+    b = new Board(@board_array)
+    assert.equal b.get(4, 0), Piece.B
+    assert.equal b.get(0, 0), Piece.R
+    assert.equal b.get(0, 5), Piece.P
+    assert.equal b.get(4, 5), Piece.G
   
   test '#array', ->
     b = new Board(@board_array)
