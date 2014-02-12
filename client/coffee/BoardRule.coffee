@@ -61,7 +61,41 @@ define ["coffee/Piece.js", "coffee/Board.js", "underscore"]
       gen = () -> new Piece(_.sample(Piece.colors))
       return ((gen() for p in [0...n]) for n in number_for_columns)
 
-    
+    @calcPieceMovings: (mark_array, number_for_columns) ->
+      gen = (from_row, from_col, to_row, to_col) ->
+        return {from:{row:from_row, col:from_col}, to:{row:to_row, col:to_col}}
+        
+      ret = []
+
+      for col in [0...Board.width]
+        count = 0
+        for row in [0...Board.height].reverse()
+          if mark_array[row][col]
+            count += 1
+          else if count > 0
+            ret.push(gen(row, col, row + count, col))
+
+      for n, col in number_for_columns
+        for ri in [0...n]
+          ret.push(gen(-ri - 1, col, n - ri - 1, col))
+
+      return ret
+
+    @makeBoardMove: (board, movings, to_gen_pieces) ->
+      org_array = board.array
+      ret_array = ((p for p in row) for row in org_array)
+
+      for obj in movings
+        {from: f, to: t} = obj
+
+        if f.row >= 0
+          ret_array[t.row][t.col] = org_array[f.row][f.col]
+        else
+          ret_array[t.row][t.col] = to_gen_pieces[f.col][-f.row - 1]
+
+      return new Board ret_array
+        
+
   return BoardRule
 
 

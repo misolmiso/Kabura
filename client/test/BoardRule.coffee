@@ -84,3 +84,80 @@ suite 'BoardRule', ->
     for col, i in actual_array
       assert.lengthOf col, expected[i]
     
+  test 'calcPieceMovings', ->
+    BR = BoardRule
+    P = Piece
+
+    board = new Board [
+      [P.R, P.B, P.R, P.B, P.Y, P.B]
+      [P.B, P.B, P.R, P.Y, P.Y, P.Y],
+      [P.B, P.Y, P.B, P.Y, P.B, P.Y],
+      [P.B, P.B, P.Y, P.B, P.Y, P.B],
+      [P.Y, P.B, P.B, P.Y, P.B, P.Y],
+    ]
+
+    lines = BR.findLinedUpPieces(board)
+    delete_pieces = BR.markToDeletePieces(lines, board)
+    ns = BR.calcNumberOfPicesToGenerateForColumns(delete_pieces)
+    actual = BR.calcPieceMovings(delete_pieces, ns)
+
+    expected = [
+      {from:{row:  0, col: 0}, to:{row: 3, col: 0}},
+      {from:{row: -1, col: 0}, to:{row: 2, col: 0}},
+      {from:{row: -2, col: 0}, to:{row: 1, col: 0}},
+      {from:{row: -3, col: 0}, to:{row: 0, col: 0}},
+      {from:{row:  0, col: 3}, to:{row: 1, col: 3}},
+      {from:{row:  0, col: 4}, to:{row: 1, col: 4}},
+      {from:{row:  0, col: 5}, to:{row: 1, col: 5}},
+      {from:{row: -1, col: 3}, to:{row: 0, col: 3}},
+      {from:{row: -1, col: 4}, to:{row: 0, col: 4}},
+      {from:{row: -1, col: 5}, to:{row: 0, col: 5}}
+    ]
+
+    assert.equal actual.length, expected.length
+
+    compare = (a, b) ->
+      if a.from.row < b.from.row || a.from.col < b.from.col
+        return -1
+      else
+        return 1
+
+    sorted_actual = actual.sort(compare)
+    sorted_expected = expected.sort(compare)
+
+    for i in [0...expected.length]
+      assert.deepEqual sorted_actual[i], sorted_expected[i]
+      
+      
+  test 'makeBoardMove', ->
+    BR = BoardRule
+    P = Piece
+    
+    board = new Board [
+      [P.R, P.B, P.R, P.B, P.Y, P.B]
+      [P.B, P.B, P.R, P.Y, P.Y, P.Y],
+      [P.B, P.Y, P.B, P.Y, P.B, P.Y],
+      [P.B, P.B, P.Y, P.B, P.Y, P.B],
+      [P.Y, P.B, P.B, P.Y, P.B, P.Y],
+    ]
+
+    to_gen_pieces = [
+      [P.Y, P.R, P.B], [], [], [P.B], [P.P], [P.P]
+    ]
+
+    expected = new Board [
+      [P.B, P.B, P.R, P.B, P.P, P.P]
+      [P.R, P.B, P.R, P.B, P.Y, P.B],
+      [P.Y, P.Y, P.B, P.Y, P.B, P.Y],
+      [P.R, P.B, P.Y, P.B, P.Y, P.B],
+      [P.Y, P.B, P.B, P.Y, P.B, P.Y],
+    ]
+
+    lines = BR.findLinedUpPieces(board)
+    delete_pieces = BR.markToDeletePieces(lines, board)
+    ns = BR.calcNumberOfPicesToGenerateForColumns(delete_pieces)
+    movings = BR.calcPieceMovings(delete_pieces, ns)
+    
+    actual = BR.makeBoardMove(board, movings, to_gen_pieces)
+
+    assert.deepEqual actual.array, expected.array
