@@ -7,7 +7,7 @@ define ["underscore"], (_) ->
     class @LinedUp
       constructor: (@length, @color, @col, @row, @isHorizontal) ->
 
-    @findLinedUpPieces = (board) ->
+    @findLinedUpPieces: (board) ->
       group = (line) ->
         ret = [{index:0, length:1, color:line[0].color}]
         for p, i in line[1..]
@@ -35,6 +35,20 @@ define ["underscore"], (_) ->
       ))
 
       return ret
+
+    @markToDeletePieces: (lines, board) ->
+      array = board.array
+      ret_board = ((false for p in row) for row in array)
+
+      for line in lines
+        if line.isHorizontal
+          for c in [0...line.length]
+            ret_board[line.row][line.col + c] = true
+        else
+          for r in [0...line.length]
+            ret_board[line.row + r][line.col] = true
+      return ret_board
+    
   return BoardRule
 
 

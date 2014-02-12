@@ -40,3 +40,20 @@ suite 'BoardRule', ->
       else
         for row in [(line.row)...(line.row + line.length)]
           assert.equal @board.get(row, line.col).color, line.color
+
+  test 'markToDeletePieces', ->
+    to_delete_pieces_expected = [
+      [true, true, true, true, true, true],
+      [true, true, true, false, false, false],
+      [true, false, false, false, false, false],
+      [true, false, false, false, false, false],
+      [true, false, false, false, false, false]
+    ]
+
+    BR = BoardRule
+
+    lines = BR.findLinedUpPieces(@board)
+    actual = BR.markToDeletePieces(lines, @board)
+
+    assert.deepEqual(actual, to_delete_pieces_expected)
+    
