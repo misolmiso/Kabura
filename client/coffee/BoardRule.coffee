@@ -2,7 +2,8 @@
 
 
   
-define ["coffee/Board.js", "underscore"], (Board, _) ->
+define ["coffee/Piece.js", "coffee/Board.js", "underscore"]
+, (Piece, Board, _) ->
   class BoardRule
     class @LinedUp
       constructor: (@length, @color, @col, @row, @isHorizontal) ->
@@ -55,6 +56,10 @@ define ["coffee/Board.js", "underscore"], (Board, _) ->
         sum((1 for r in [0...Board.height] when mark_array[r][column]))
        
       return (column_sum(c) for c in [0...Board.width])
+
+    @generatePieces: (number_for_columns) ->
+      gen = () -> new Piece(_.sample(Piece.colors))
+      return ((gen() for p in [0...n]) for n in number_for_columns)
 
     
   return BoardRule

@@ -69,3 +69,18 @@ suite 'BoardRule', ->
 
     assert.deepEqual(actual, expected)
 
+  test 'generatePieces', ->
+    BR = BoardRule
+
+    board = @board
+    lines = BR.findLinedUpPieces(board)
+    delete_pieces = BR.markToDeletePieces(lines, board)
+    ns = BR.calcNumberOfPicesToGenerateForColumns(delete_pieces)
+
+    actual_array = BR.generatePieces(ns)
+
+    expected = [5, 2, 2, 1, 1, 1]
+
+    for col, i in actual_array
+      assert.lengthOf col, expected[i]
+    
