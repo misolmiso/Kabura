@@ -12,7 +12,8 @@ setTimer = (eventTarget, waitTime, onTimeEvent, waitTimeEvent = ->) ->
       
   eventTarget.on 'enterframe', event
 
-require ["enchant", "underscore"], (e, _) =>
+require ["coffee/Board", "coffee/BoardRule", "enchant", "underscore"]
+, (Board, BoardRule, e, _) =>
   enchant('')
 
   game = new Core(window.innerWidth, window.innerHeight)
@@ -52,32 +53,17 @@ require ["enchant", "underscore"], (e, _) =>
     .map((k) -> new Piece(k)) for c in [0...6]))
 
     delete_pieces = (pieces) ->
+      board_array = ((null for c in [0...6]) for r in [0...5])
+      
       for p in pieces
-        p.del = off
+        board_array[p.row][p.col] = p
+      
+      board = new Board(board_array)
+      lines = BoardRule.findLinedUpPieces(board)
+      marked = BoardRule.markToDeletePieces(lines, board)
 
-      for r, cs of _.groupBy(pieces, (p) -> p.row)
-        sorted = _.sortBy(cs, (c) -> c.col)
-        temp = [[_.first(sorted)]]
-        for c in _.rest(sorted)
-          if _.first(_.last(temp)).color is c.color
-            _.last(temp).push(c)
-          else
-            temp.push [c]
-        for ts in temp when ts.length >= 3
-          for t in ts
-            t.del = on for t in ts
-
-      for r, cs of _.groupBy(pieces, (p) -> p.col)
-        sorted = _.sortBy(cs, (c) -> c.row)
-        temp = [[_.first(sorted)]]
-        for c in _.rest(sorted)
-          if _.first(_.last(temp)).color is c.color
-            _.last(temp).push(c)
-          else
-            temp.push [c]
-        for ts in temp when ts.length >= 3
-          for t in ts
-            t.del = on for t in ts
+      for p in pieces
+        p.del = marked[p.row][p.col]
 
       for r, cs of _.groupBy(pieces, (p) -> p.col)
         {true:dels, false:lefs} = _.groupBy(cs, (p) -> p.del)
