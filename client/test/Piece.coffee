@@ -15,13 +15,17 @@ suite 'Piece', ->
     assert.lengthOf colors, 5
     assert.includeMembers colors, ['red', 'blue', 'green', 'yellow', 'purple']
 
-  test 'constructor', ->
-    colors = Piece.colors
+  test '.R', ->
+    assert.ok Piece.R.toString() == 'red'
 
-    colors.forEach (c) ->
-      assert.doesNotThrow -> new Piece(c)
+  test '.B', ->
+    assert.ok Piece.B.toString() == 'blue'
 
-    colors.forEach (c) ->
-      p = new Piece(c)
-      assert.equal p.color, c
+  test '.G', ->
+    assert.ok Piece.G.toString() == 'green'
 
+  test '.Y', ->
+    assert.ok Piece.Y.toString() == 'yellow'
+
+  test '.P', ->
+    assert.ok Piece.P.toString() == 'purple'

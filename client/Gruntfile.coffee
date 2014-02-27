@@ -36,7 +36,7 @@ module.exports = (grunt) ->
   
     watch:
       debug:
-        files: "coffee/*.coffee",
+        files: ["coffee/*.coffee", "test/*.coffee"]
         tasks: ["debug"]
 
     coffee:
