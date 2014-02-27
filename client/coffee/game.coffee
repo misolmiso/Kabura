@@ -61,27 +61,31 @@ require ["coffee/Board", "coffee/BoardRule", "enchant", "underscore"]
       board = new Board(board_array)
       lines = BoardRule.findLinedUpPieces(board)
       marked = BoardRule.markToDeletePieces(lines, board)
+      ns = BoardRule.calcNumberOfPicesToGenerateForColumns(marked)
+      movings = BoardRule.calcPieceMovings(marked, ns)
 
-      for p in pieces
-        p.del = marked[p.row][p.col]
+      to_add_pieces = ([] for c in [0...6])
 
-      for r, cs of _.groupBy(pieces, (p) -> p.col)
-        {true:dels, false:lefs} = _.groupBy(cs, (p) -> p.del)
+      for rs, row in board.array
+        for p, col in rs
+          if marked[row][col]
+            to_add_pieces[col].push(p)
 
-        for p, i in _.sortBy(lefs, (p) -> -p.row)
-          p.row = (4 - i)
+      new_board = BoardRule.makeBoardMove(board, movings, to_add_pieces)
 
-        if dels?
-          for p, i in dels
-            p.resetColor(_.sample(_.keys(Piece.colorToIndex)))
-            p.moveTo(p.x, (-i - 1) * 128)
-            p.row = 4 - lefs.length - i
-        
-      for p in pieces
+      for moving in movings
+        {from:from, to:to} = moving
+        p = new_board.array[to.row][to.col]
+        p.moveTo(from.col * 128, from.row * 128)
+        p.resetColor(_.sample(Piece.color))
+        p.row = to.row
+        p.col = to.col
         p.tl.exec(-> @moving = on)
-        p.tl.moveTo(p.col * 128, p.row * 128, 10).exec(-> @moving = off)
+        p.tl.moveTo(to.col * 128, to.row * 128, 10).exec(-> @moving = off)
 
-      if pieces.filter((p) -> p.del).length != 0
+      pieces = _.flatten(new_board.array)
+
+      if marked.filter((f) -> f).length != 0
         game.rootScene.tl.delay(10).exec ->
           delete_pieces(pieces)
 
@@ -132,6 +136,9 @@ require ["coffee/Board", "coffee/BoardRule", "enchant", "underscore"]
    
       p.on 'touchend', (evt) ->
         delete_pieces(pieces)
+
+        if @x != @col * 128 and @y != @row * 128
+          @tl.moveTo(@col * 128, @row * 128, 10)
         
         if touch isnt this
           return
